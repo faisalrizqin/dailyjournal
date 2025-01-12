@@ -7,7 +7,7 @@ include "koneksi.php";
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Latihan-boostrap</title>
+    <title>UAS-PBW</title>
     <link rel="icon" href="img/logo.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   </head>
@@ -97,21 +97,36 @@ include "koneksi.php";
     <!-- /article -->
   
 
-    <!-- gallery -->
+<!-- gallery -->
 <section id="gallery" class="text-center p-5 bg-info-subtle">
   <div class="container"> 
     <h1 class="fw-bold display-4 pb-3">Gallery</h1>
     <div id="carouselExample" class="carousel slide mx-auto" style="max-width: 700px; max-height: 500px;">
       <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img src="./Assets/3.jpg" class="d-block w-100" style="height: 500px;" alt="Image 1">
-        </div>
-        <div class="carousel-item">
-          <img src="./Assets/8.png" class="d-block w-100" style="height: 500px;" alt="Image 2">
-        </div>
-        <div class="carousel-item">
-          <img src="./Assets/11.jpg" class="d-block w-100" style="height: 500px;" alt="Image 3">
-        </div>
+        <?php
+        // Ambil data dari database
+        $sql = "SELECT * FROM gallery ORDER BY tanggal DESC";
+        $hasil = $conn->query($sql);
+
+        $isActive = true; // Penanda untuk item pertama
+        while ($row = $hasil->fetch_assoc()) {
+            if ($row["gambar"] != '' && file_exists('img/' . $row["gambar"])) {
+                // Tambahkan kelas 'active' pada item pertama
+                $activeClass = $isActive ? ' active' : '';
+                $isActive = false; // Pastikan hanya satu item yang 'active'
+        ?>
+                <div class="carousel-item<?= $activeClass ?>">
+                  <img src="img/<?= $row["gambar"] ?>" class="d-block w-100" style="height: 500px;" alt="Gallery Image">
+                  <div class="carousel-caption d-none d-md-block">
+                    <p class="text-light bg-dark bg-opacity-50 px-3 py-1 d-inline-block rounded">
+                      Uploaded on: <?= $row["tanggal"] ?>
+                    </p>
+                  </div>
+                </div>
+        <?php
+            }
+        }
+        ?>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -125,6 +140,7 @@ include "koneksi.php";
   </div>
 </section>
 <!-- /gallery -->
+
 
 <!-- Schedule start -->
 <section id="schedule" class="text-center p-5">

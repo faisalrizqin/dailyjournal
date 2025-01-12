@@ -1,0 +1,6 @@
+admin: 123456
+danny: admin
+ayato: pass1
+wawan: pass2
+sunny: pass3
+tarnished: pass4
